@@ -1,0 +1,56 @@
+eslint.config.js => membantu check standart kodingan
+tsconfig.json => untuk build ts ke js
+README.md => guide untuk project
+vite.config.ts => konfigurasi vite kita pada react
+package.json => mengandung informasi liblary/module/name dan yang lainnya pada project kita
+devDependencies => akan diinstall saat mode development atau saat dilokal
+
+FILE SRC :
+main.tsx => file utama aplikasi akan dijalankan atau dibaca
+
+Tidak semua browser itu support js jadi ada proses :
+React Code => esbuild (babel/webpack dll) => BrowerCode
+
+
+Props :
+contoh ada card tapi pengenya kita isinya itu beda-beda bukan sama
+
+urutan buat komponen :
+1. cari tau dulu objectnya apa aja
+2. buat komponen (misal card)
+3. buat type props nya
+4. masuk ke main file yang memanggil props
+5. identifikasikan lagi type object atau data
+6. fetch datanya
+7. keluarkan menggunakan map
+
+
+State :
+untuk merubah data secara dinamis misal dengan onclick atau scroll dll dengan rerandering
+
+urutan buat state :
+1. buat komponennya dulu seperti button dll
+2. buat variabel destruct untuk state dan usestate nya
+3. buat function untuk merubah
+
+
+Hooks :
+pada dasranya adalah function yang diawali dengan kata use useState useScroll dll
+
+1. Jika kita ingin buat custom hooks harus diawali dengan use contoh useCounter
+2. Jika sudah kompleks function2nya mending pakai custom hooks
+
+
+A. Repainting : mengubah tampilan seperti color, font color, visibility dan yang lainnya
+Proses ini tidak merubah posisi-posisi elemen yang ada di browser
+
+B. Reflowing (rada repot) : dapat mengubah posisi-posisi atau struktur elemen html seperti margin,padding dan yang lainnya. Merender ulang semua elemen karena ada yang berpindah 
+
+Jika pakai vanila js maka akan mengeksekusi satu2 dari select elemen, ganti warna dll mangkannya pakai react
+
+kalau direact bisa dijadikan satu eksekusi-eksekusinya
+
+
+REACT JS DOM MANIPULATION
+pakai virtual dom sehingga yang dirender bukan semua, tapi yang pengen dirubah aja di state
+
