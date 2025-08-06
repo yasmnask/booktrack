@@ -79,16 +79,16 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${
+      className={`min-h-screen transition-colors duration-300 relative ${
         isDarkMode ? "dark bg-gray-900" : "bg-gray-50"
       }`}
     >
       {/* Scroll to top component */}
       <ScrollToTop />
 
-      {/* Header */}
+      {/* Header - z-index 40 agar selalu di atas */}
       <header
-        className={`shadow-sm border-b transition-colors duration-300 ${
+        className={`shadow-sm border-b transition-colors duration-300 relative z-40 ${
           isDarkMode
             ? "bg-gray-800 border-gray-700"
             : "bg-white border-gray-200"
@@ -176,34 +176,36 @@ function App() {
         </div>
       </header>
 
-      {/* Routes */}
-      <Routes>
-        <Route
-          path="/"
-          element={<HomePage isDarkMode={isDarkMode} language={language} />}
-        />
-        <Route
-          path="/search"
-          element={<SearchPage isDarkMode={isDarkMode} language={language} />}
-        />
-        <Route
-          path="/favorites"
-          element={
-            <FavoriteBookPage isDarkMode={isDarkMode} language={language} />
-          }
-        />
-        <Route
-          path="/book/:bookId"
-          element={
-            <BookDetailPage isDarkMode={isDarkMode} language={language} />
-          }
-        />
-        <Route path="*" element={<NotFoundPage isDarkMode={isDarkMode} />} />
-      </Routes>
+      {/* Routes - Konten utama halaman, z-index 30 agar di atas background animasi */}
+      <div className="relative z-30">
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage isDarkMode={isDarkMode} language={language} />}
+          />
+          <Route
+            path="/search"
+            element={<SearchPage isDarkMode={isDarkMode} language={language} />}
+          />
+          <Route
+            path="/favorites"
+            element={
+              <FavoriteBookPage isDarkMode={isDarkMode} language={language} />
+            }
+          />
+          <Route
+            path="/book/:bookId"
+            element={
+              <BookDetailPage isDarkMode={isDarkMode} language={language} />
+            }
+          />
+          <Route path="*" element={<NotFoundPage isDarkMode={isDarkMode} />} />
+        </Routes>
+      </div>
 
-      {/* Footer */}
+      {/* Footer - z-index 40 agar selalu di atas */}
       <footer
-        className={`py-8 transition-colors duration-300 ${
+        className={`py-8 transition-colors duration-300 relative z-40 ${
           isDarkMode ? "bg-gray-900 text-white" : "bg-gray-900 text-white"
         }`}
       >

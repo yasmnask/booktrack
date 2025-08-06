@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import { bookService } from "../services/bookService";
 import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book } from "../types/book";
+import AnimatedBooks from "../components/AnimatedBooks"; // Import the new component
 
 interface HomePageProps {
   isDarkMode: boolean;
@@ -37,6 +38,8 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [scrollFactor, setScrollFactor] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
 
   // Buat ref untuk bagian "Popular Books"
   const popularBooksRef = useRef<HTMLElement>(null);
@@ -93,6 +96,7 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
 
   const t = translations[language];
 
+  // Effect to fetch books
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -113,6 +117,7 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
 
   const isFirstLoad = useRef(true);
 
+  // Effect to scroll to top on first load or to Popular Books section on page change
   useEffect(() => {
     if (!loading && !error) {
       if (isFirstLoad.current) {
@@ -125,6 +130,41 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
       }
     }
   }, [loading, error, currentPage]);
+
+  // Effect to track global scroll position for parallax and rotation
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+
+      // Calculate scrollFactor for disappearance based on popularBooksRef position
+      if (popularBooksRef.current) {
+        const rect = popularBooksRef.current.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        const startDisappearPoint = viewportHeight * 0.8; // When top of section is 80% down the viewport
+        const endDisappearPoint = viewportHeight * 0.2; // When top of section is 20% down the viewport
+
+        let newScrollFactor = 0;
+        if (rect.top >= startDisappearPoint) {
+          newScrollFactor = 0; // Section is far below, books fully visible
+        } else if (rect.top <= endDisappearPoint) {
+          newScrollFactor = 1; // Section has scrolled up significantly, books fully disappeared
+        } else {
+          newScrollFactor =
+            1 -
+            (rect.top - endDisappearPoint) /
+              (startDisappearPoint - endDisappearPoint);
+        }
+        setScrollFactor(newScrollFactor);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [popularBooksRef]);
 
   const handleFavoriteClick = (e: React.MouseEvent, book: Book) => {
     e.preventDefault();
@@ -212,27 +252,31 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
   };
 
   return (
-    <div>
-      {/* Hero Section with Background */}
+    <div className="relative">
+      {" "}
+      {/* Wrapper untuk fixed elements */}
+      {/* Lapisan Opacity (lapisan paling atas, z-index 10) */}
+      <div
+        className="fixed inset-0 pointer-events-none z-10"
+        style={{
+          backgroundColor: isDarkMode
+            ? "rgba(0,0,0,0.3)"
+            : "rgba(255,255,255,0.3)",
+        }}
+      ></div>
+      {/* Hero Section with Background (konten utama, z-index 30) */}
       <section
-        className={`min-h-screen flex items-center justify-center relative transition-colors duration-300 ${
+        className={`min-h-screen flex items-center justify-center relative z-30 transition-colors duration-300 ${
           isDarkMode ? "bg-gray-800" : "bg-white"
         }`}
-        style={{
-          backgroundImage: `url('/images/open-book.png')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
       >
-        {/* Overlay for better text readability */}
-        <div
-          className={`absolute inset-0 ${
-            isDarkMode ? "bg-gray-900/80" : "bg-white/85"
-          }`}
-        ></div>
-
+        <AnimatedBooks
+          isDarkMode={isDarkMode}
+          scrollFactor={scrollFactor}
+          scrollY={scrollY}
+        />
         {/* Content */}
+        <div className="fixed inset-0 pointer-events-none z-10 bg-gray-50 opacity-75"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 relative z-10">
           <h2
             className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
@@ -293,9 +337,8 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
           </div>
         </div>
       </section>
-
-      {/* Popular Books Section */}
-      <section ref={popularBooksRef} className="py-16">
+      {/* Popular Books Section (konten utama, z-index 30) */}
+      <section ref={popularBooksRef} className="py-16 relative z-30">
         {" "}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
