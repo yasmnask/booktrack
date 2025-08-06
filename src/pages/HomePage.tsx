@@ -24,7 +24,6 @@ import { Link } from "react-router-dom";
 import { bookService } from "../services/bookService";
 import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book } from "../types/book";
-import ScrollToTop from "../components/ScrollToTop";
 
 interface HomePageProps {
   isDarkMode: boolean;
@@ -41,8 +40,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
 
   // Buat ref untuk bagian "Popular Books"
   const popularBooksRef = useRef<HTMLElement>(null);
-  // Tambahkan ref reloadnya
-  const isInitialLoad = useRef(true);
 
   // Translations object
   const translations = {
