@@ -199,7 +199,6 @@ function App() {
               <BookDetailPage isDarkMode={isDarkMode} language={language} />
             }
           />
-          <Route path="*" element={<NotFoundPage isDarkMode={isDarkMode} />} />
         </Routes>
       </div>
 

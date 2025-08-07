@@ -20,11 +20,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useFavorites } from "../hooks/useFavorites";
+import { useUserActivity } from "../hooks/useUserActivity";
 import { Link } from "react-router-dom";
 import { bookService } from "../services/bookService";
 import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book } from "../types/book";
-import AnimatedBooks from "../components/AnimatedBooks"; // Import the new component
+import AnimatedBooks from "../components/AnimatedBooks";
 
 interface HomePageProps {
   isDarkMode: boolean;
@@ -32,7 +33,12 @@ interface HomePageProps {
 }
 
 export default function HomePage({ isDarkMode, language }: HomePageProps) {
-  const { isFavorite, toggleFavorite, isLoaded } = useFavorites();
+  const {
+    isFavorite,
+    toggleFavorite,
+    isLoaded: favoritesLoaded,
+  } = useFavorites(); // Renamed isLoaded
+  const { trackActivity } = useUserActivity(); // New hook
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -170,10 +176,11 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!isLoaded) return;
+    if (!favoritesLoaded) return; // Use favoritesLoaded here
 
     const favoriteBook = convertToFavoriteBook(book);
     toggleFavorite(favoriteBook);
+    trackActivity(book._id, "favorite", book); // Track favorite activity
 
     const action = isFavorite(book._id) ? "removed from" : "added to";
     console.log(`Book "${book.title}" ${action} favorites`);
@@ -276,7 +283,11 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
           scrollY={scrollY}
         />
         {/* Content */}
-        <div className="fixed inset-0 pointer-events-none z-10 bg-gray-50 opacity-75"></div>
+        <div
+          className={`fixed inset-0 pointer-events-none z-10 opacity-75 ${
+            isDarkMode ? "bg-gray-900" : "bg-gray-50"
+          }`}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 relative z-10">
           <h2
             className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
@@ -410,7 +421,7 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {books.map((book) => {
-                  const isBookFavorite = isLoaded
+                  const isBookFavorite = favoritesLoaded
                     ? isFavorite(book._id)
                     : false;
                   const bookRating = getBookRating(book);
@@ -419,6 +430,7 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                       key={book._id}
                       to={`/book/${book._id}`}
                       className="block"
+                      onClick={() => trackActivity(book._id, "view", book)} // Track view activity
                     >
                       <Card
                         className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
@@ -487,7 +499,7 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                               variant="outline"
                               size="sm"
                               onClick={(e) => handleFavoriteClick(e, book)}
-                              disabled={!isLoaded}
+                              disabled={!favoritesLoaded}
                               className={`flex-1 text-xs sm:text-sm transition-colors ${
                                 isBookFavorite
                                   ? isDarkMode

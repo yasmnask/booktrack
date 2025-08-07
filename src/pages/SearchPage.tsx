@@ -27,6 +27,7 @@ import { useFavorites } from "../hooks/useFavorites";
 import { bookService } from "../services/bookService";
 import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book, ApiResponse } from "../types/book";
+import RecommendedBooks from "../components/RecommendedBook";
 
 interface SearchPageProps {
   isDarkMode: boolean;
@@ -235,7 +236,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
             </p>
           </div>
         </div>
-
         {/* Search Bar */}
         <div
           className={`rounded-lg p-6 mb-8 border ${
@@ -271,9 +271,14 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
             )}
           </div>
         </div>
-
+        {/* Recommended Books (You Might Like) */}
+        {!searchQuery && (
+          <div className="mb-10">
+            <RecommendedBooks isDarkMode={isDarkMode} language={language} />
+          </div>
+        )}
         {/* Search Results Info */}
-        <div className="mb-6">
+        <div className="mb-6 mt-10">
           <div className="flex items-center justify-between">
             <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
               {loading ? (
@@ -323,7 +328,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
             )}
           </div>
         </div>
-
         {/* Error State */}
         {error && (
           <div className="text-center py-12">
@@ -337,7 +341,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
             </Button>
           </div>
         )}
-
         {/* Search Results */}
         {!error && (
           <>
@@ -482,7 +485,9 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
                       size="sm"
                       onClick={() => handlePageChange(currentPage - 1)}
                       disabled={!pagination.hasPrevPage || loading}
-                      className="bg-transparent"
+                      className={`bg-transparent ${
+                        isDarkMode ? "text-gray-300" : "text-gray-600"
+                      }`}
                     >
                       <ChevronLeft className="w-4 h-4 mr-1" />
                       {t.previous}
@@ -502,7 +507,9 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
                       size="sm"
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={!pagination.hasNextPage || loading}
-                      className="bg-transparent"
+                      className={`bg-transparent ${
+                        isDarkMode ? "text-gray-300" : "text-gray-600"
+                      }`}
                     >
                       {t.next}
                       <ChevronRight className="w-4 h-4 ml-1" />

@@ -1,4 +1,5 @@
 import type { Book, FavoriteBook } from "../types/book";
+import type { UserReview } from "../types/reading"; // New import
 
 // Convert API book to favorite book format
 export const convertToFavoriteBook = (book: Book): FavoriteBook => {
@@ -67,11 +68,33 @@ export const formatPrice = (priceString: string): string => {
 };
 
 // Get book rating (placeholder since API doesn't provide ratings)
-export const getBookRating = (book: Book): number => {
-  // Generate a consistent rating based on book ID
+// Modified to include user reviews
+export const getBookRating = (
+  book: Book,
+  userReviews: UserReview[] = []
+): number => {
+  // Generate a consistent base rating based on book ID (for books without user reviews)
   const hash = book._id.split("").reduce((a, b) => {
     a = (a << 5) - a + b.charCodeAt(0);
     return a & a;
   }, 0);
-  return Math.abs(hash % 11) / 10 + 4; // Rating between 4.0 and 5.0
+  const baseRating = Math.abs(hash % 11) / 10 + 4; // Rating between 4.0 and 5.0
+
+  const relevantReviews = userReviews.filter(
+    (review) => review.bookId === book._id
+  );
+
+  if (relevantReviews.length === 0) {
+    return baseRating;
+  }
+
+  const totalRating = relevantReviews.reduce(
+    (sum, review) => sum + review.rating,
+    0
+  );
+  const averageUserRating = totalRating / relevantReviews.length;
+
+  // Combine base rating with user reviews (e.g., 70% user rating, 30% base rating)
+  // This is a simple heuristic. You can adjust the weighting.
+  return averageUserRating * 0.7 + baseRating * 0.3;
 };
