@@ -13,7 +13,6 @@ import HomePage from "./pages/HomePage";
 import FavoriteBookPage from "./pages/FavoriteBookPage";
 import SearchPage from "./pages/SearchPage";
 import BookDetailPage from "./pages/BookDetailPage";
-import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   // Initialize dark mode from localStorage or default to false

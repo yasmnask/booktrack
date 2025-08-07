@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { Book } from "lucide-react";
 
 interface BookParticle {
