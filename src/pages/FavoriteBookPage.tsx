@@ -133,7 +133,7 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
     });
 
   const handleRemoveFromFavorites = (e: React.MouseEvent, bookId: string) => {
-    e.preventDefault(); // Prevent link navigation when clicking remove button
+    e.preventDefault();
     e.stopPropagation();
     removeFromFavorites(bookId);
   };
@@ -302,7 +302,7 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
                     placeholder={t.searchPlaceholder}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
                       isDarkMode
                         ? "border-gray-600 bg-gray-700 text-white"
                         : "border-gray-300 bg-white text-gray-900"

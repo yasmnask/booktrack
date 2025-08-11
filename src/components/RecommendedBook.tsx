@@ -65,7 +65,7 @@ const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
         if (recentBookIds.length === 0) {
           // If no activity, fetch some random popular books
           const response = await bookService.getAllBooks(1);
-          setRecommendedBooks(response.books.slice(0, 4)); // Show first 4 popular books
+          setRecommendedBooks(response.books.slice(0, 4));
           setLoading(false);
           return;
         }

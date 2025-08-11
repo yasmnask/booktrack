@@ -106,7 +106,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
 
   const t = translations[language];
 
-  // Update search query from URL params
   useEffect(() => {
     const query = searchParams.get("q");
     const page = Number.parseInt(searchParams.get("page") || "1");
@@ -115,7 +114,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
       setCurrentPage(page);
       performSearch(query, page);
     } else {
-      // Load all books if no search query
       loadAllBooks(page);
     }
   }, [searchParams]);
@@ -156,7 +154,6 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
     setSearchQuery(query);
     setCurrentPage(1);
 
-    // Update URL with search query
     if (query.trim()) {
       setSearchParams({ q: query.trim(), page: "1" });
     } else {
@@ -251,7 +248,7 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
               placeholder={t.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
-              className={`w-full pl-12 pr-12 py-3 text-lg border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              className={`w-full pl-12 pr-12 py-3 text-lg border rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
                 isDarkMode
                   ? "border-gray-600 bg-gray-700 text-white"
                   : "border-gray-300 bg-white text-gray-900"
@@ -388,7 +385,7 @@ const SearchPage = ({ isDarkMode, language }: SearchPageProps) => {
                         <Card
                           className={`hover:shadow-lg transition-all duration-300 ${
                             isDarkMode
-                              ? "bg-gray-800 border-gray-700"
+                              ? "bg-gray-800 border-gray-700 hover:shadow-gray-950"
                               : "bg-white border-gray-200"
                           }`}
                         >

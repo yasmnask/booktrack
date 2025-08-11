@@ -52,7 +52,7 @@ const AnimatedBooks = ({
         top: Math.random() * 100, // % of viewport height
         left: Math.random() * 100, // % of viewport width
         rotation: Math.random() * 360, // initial random degrees
-        size: Math.random() * (40 - 20) + 20, // size between 20px and 40px
+        size: Math.random() * (60 - 20) + 20, // size between 20px and 40px
         floatAmplitudeX: Math.random() * (50 - 15) + 15, // 15 to 50px
         floatAmplitudeY: Math.random() * (40 - 10) + 10, // 10 to 40px
         floatSpeedX: Math.random() * (0.2 - 0.08) + 0.08, // 0.08 to 0.2
@@ -64,8 +64,8 @@ const AnimatedBooks = ({
   }, []);
 
   // Constants for parallax and rotation speed
-  const parallaxSpeed = 0.45; // How fast books move relative to scroll
-  const rotationSpeed = 0.002; // radians per second (bisa kamu adjust sendiri)
+  const parallaxSpeed = 0.45;
+  const rotationSpeed = 0.28;
 
   return (
     <div

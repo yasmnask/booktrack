@@ -1,5 +1,4 @@
 "use client";
-
 import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "../components/ui/button";
@@ -26,6 +25,7 @@ import { bookService } from "../services/bookService";
 import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book } from "../types/book";
 import AnimatedBooks from "../components/AnimatedBooks";
+import UserReviewsSection from "../components/UserReviewsSection";
 
 interface HomePageProps {
   isDarkMode: boolean;
@@ -37,8 +37,8 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
     isFavorite,
     toggleFavorite,
     isLoaded: favoritesLoaded,
-  } = useFavorites(); // Renamed isLoaded
-  const { trackActivity } = useUserActivity(); // New hook
+  } = useFavorites();
+  const { trackActivity } = useUserActivity();
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,14 +46,10 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [scrollFactor, setScrollFactor] = useState(0);
   const [scrollY, setScrollY] = useState(0);
-
-  // Buat ref untuk bagian "Popular Books"
   const popularBooksRef = useRef<HTMLElement>(null);
-
-  // Translations object
   const translations = {
     id: {
-      heroTitle: "Temukan Buku Favorit Anda",
+      heroTitle: "Temukan Halaman Favorit Anda",
       heroSubtitle:
         "Jelajahi koleksi buku populer dan simpan buku-buku favorit Anda dalam satu tempat",
       searchBooks: "Cari Buku",
@@ -74,9 +70,13 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
       previous: "Sebelumnya",
       next: "Selanjutnya",
       page: "Halaman",
+      reviewsTitle: "Apa Kata Pembaca Kami",
+      reviewsSubtitle:
+        "Dengar langsung dari tiga pengguna setia kami yang bersemangat tentang bagaimana Booktrack telah mengubah pengalaman membaca mereka.",
+      aboutBook: "- Tentang buku:",
     },
     en: {
-      heroTitle: "Find Your Favorite Books",
+      heroTitle: "Find Your Favorite Page",
       heroSubtitle:
         "Explore popular book collections and save your favorite books in one place",
       searchBooks: "Search Books",
@@ -97,12 +97,13 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
       previous: "Previous",
       next: "Next",
       page: "Page",
+      reviewsTitle: "What Our Readers Say",
+      reviewsSubtitle:
+        "Hear directly from three of our loyal users who are passionate about how Booktrack has transformed their reading experience.",
+      aboutBook: "- About the book:",
     },
   };
-
   const t = translations[language];
-
-  // Effect to fetch books
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -117,44 +118,34 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
         setLoading(false);
       }
     };
-
     fetchBooks();
   }, [currentPage]);
-
   const isFirstLoad = useRef(true);
-
-  // Effect to scroll to top on first load or to Popular Books section on page change
   useEffect(() => {
     if (!loading && !error) {
       if (isFirstLoad.current) {
         window.scrollTo({ top: 0, behavior: "smooth" });
         console.log("Scrolled to top (first load)");
-        isFirstLoad.current = false; // Set jadi false setelah first load
+        isFirstLoad.current = false;
       } else if (popularBooksRef.current) {
         popularBooksRef.current.scrollIntoView({ behavior: "smooth" });
         console.log("Scrolled to Popular Books section");
       }
     }
   }, [loading, error, currentPage]);
-
-  // Effect to track global scroll position for parallax and rotation
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
-
-      // Calculate scrollFactor for disappearance based on popularBooksRef position
       if (popularBooksRef.current) {
         const rect = popularBooksRef.current.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
-
-        const startDisappearPoint = viewportHeight * 0.8; // When top of section is 80% down the viewport
-        const endDisappearPoint = viewportHeight * 0.2; // When top of section is 20% down the viewport
-
+        const startDisappearPoint = viewportHeight * 0.8;
+        const endDisappearPoint = viewportHeight * 0.2;
         let newScrollFactor = 0;
         if (rect.top >= startDisappearPoint) {
-          newScrollFactor = 0; // Section is far below, books fully visible
+          newScrollFactor = 0;
         } else if (rect.top <= endDisappearPoint) {
-          newScrollFactor = 1; // Section has scrolled up significantly, books fully disappeared
+          newScrollFactor = 1;
         } else {
           newScrollFactor =
             1 -
@@ -164,28 +155,22 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
         setScrollFactor(newScrollFactor);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [popularBooksRef]);
-
   const handleFavoriteClick = (e: React.MouseEvent, book: Book) => {
     e.preventDefault();
     e.stopPropagation();
-
-    if (!favoritesLoaded) return; // Use favoritesLoaded here
-
+    if (!favoritesLoaded) return;
     const favoriteBook = convertToFavoriteBook(book);
     toggleFavorite(favoriteBook);
-    trackActivity(book._id, "favorite", book); // Track favorite activity
-
+    trackActivity(book._id, "favorite", book);
     const action = isFavorite(book._id) ? "removed from" : "added to";
     console.log(`Book "${book.title}" ${action} favorites`);
   };
-
   const retryFetch = () => {
     const fetchBooks = async () => {
       try {
@@ -200,31 +185,24 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
         setLoading(false);
       }
     };
-
     fetchBooks();
   };
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll ke bagian "Popular Books"
     popularBooksRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-
   const getPageNumbers = (currentPage: number, totalPages: number) => {
     const pageNumbers: (number | string)[] = [];
     const maxVisiblePages = 3;
-
     if (totalPages <= maxVisiblePages + 2) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
       pageNumbers.push(1);
-
       if (currentPage > 2 + Math.floor(maxVisiblePages / 2)) {
         pageNumbers.push("...");
       }
-
       let startPage = Math.max(
         2,
         currentPage - Math.floor(maxVisiblePages / 2)
@@ -233,48 +211,41 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
         totalPages - 1,
         currentPage + Math.floor(maxVisiblePages / 2)
       );
-
       if (currentPage <= Math.floor(maxVisiblePages / 2) + 1) {
         endPage = Math.min(totalPages - 1, maxVisiblePages + 1);
       }
       if (currentPage >= totalPages - Math.floor(maxVisiblePages / 2)) {
         startPage = Math.max(2, totalPages - maxVisiblePages);
       }
-
       for (let i = startPage; i <= endPage; i++) {
         if (!pageNumbers.includes(i)) {
           pageNumbers.push(i);
         }
       }
-
       if (currentPage < totalPages - 1 - Math.floor(maxVisiblePages / 2)) {
         pageNumbers.push("...");
       }
-
       if (totalPages > 1 && !pageNumbers.includes(totalPages)) {
         pageNumbers.push(totalPages);
       }
     }
     return pageNumbers;
   };
-
   return (
     <div className="relative">
-      {" "}
-      {/* Wrapper untuk fixed elements */}
       {/* Lapisan Opacity (lapisan paling atas, z-index 10) */}
       <div
         className="fixed inset-0 pointer-events-none z-10"
         style={{
           backgroundColor: isDarkMode
-            ? "rgba(0,0,0,0.3)"
+            ? "rgb(0,0,0,0.3)"
             : "rgba(255,255,255,0.3)",
         }}
       ></div>
       {/* Hero Section with Background (konten utama, z-index 30) */}
       <section
         className={`min-h-screen flex items-center justify-center relative z-30 transition-colors duration-300 ${
-          isDarkMode ? "bg-gray-800" : "bg-white"
+          isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-100 text-gray-700"
         }`}
       >
         <AnimatedBooks
@@ -284,13 +255,15 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
         />
         {/* Content */}
         <div
-          className={`fixed inset-0 pointer-events-none z-10 opacity-75 ${
-            isDarkMode ? "bg-gray-900" : "bg-gray-50"
+          className={`fixed inset-0 pointer-events-none z-10 opacity-70 ${
+            isDarkMode
+              ? "bg-gray-700 text-gray-300"
+              : "bg-gray-100 text-gray-700"
           }`}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 relative z-10">
           <h2
-            className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 ${
+            className={`tracking-tighter sm:text-5xl text-4xl lg:text-6xl font-bold mb-6 ${
               isDarkMode ? "text-white" : "text-gray-900"
             }`}
           >
@@ -331,30 +304,31 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
               </Button>
             </Link>
           </div>
-
-          {/* Scroll indicator */}
-          <div className="animate-bounce">
-            <div
-              className={`w-6 h-10 border-2 rounded-full mx-auto ${
-                isDarkMode ? "border-gray-300" : "border-gray-600"
-              }`}
+          <div className="animate-bounce mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="mx-auto w-8 h-8"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={isDarkMode ? "#D1D5DB" : "#4B5563"}
+              strokeWidth={1.5}
             >
-              <div
-                className={`w-1 h-3 rounded-full mx-auto mt-2 animate-pulse ${
-                  isDarkMode ? "bg-gray-300" : "bg-gray-600"
-                }`}
-              ></div>
-            </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 6.75V17.25C3 18.4934 4.00659 19.5 5.25 19.5H18.75C19.9934 19.5 21 18.4934 21 17.25V6.75M3 6.75C3 5.50659 4.00659 4.5 5.25 4.5H18.75C19.9934 4.5 21 5.50659 21 6.75M3 6.75L12 13.5L21 6.75"
+              />
+            </svg>
           </div>
         </div>
       </section>
-      {/* Popular Books Section (konten utama, z-index 30) */}
+      {/* Books Section (konten utama, z-index 30) */}
       <section ref={popularBooksRef} className="py-16 relative z-30">
         {" "}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h3
-              className={`text-2xl sm:text-3xl font-bold mb-4 ${
+              className={`text-xl font-bold tracking-tighter sm:text-4xl ${
                 isDarkMode ? "text-white" : "text-gray-900"
               }`}
             >
@@ -399,7 +373,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
               </span>
             </div>
           )}
-
           {/* Error State */}
           {error && (
             <div className="text-center py-12">
@@ -415,7 +388,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
               </Button>
             </div>
           )}
-
           {/* Books Grid */}
           {!loading && !error && (
             <>
@@ -435,8 +407,8 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                       <Card
                         className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
                           isDarkMode
-                            ? "bg-gray-800 border-gray-700 hover:shadow-gray-900/20"
-                            : "bg-white border-gray-200"
+                            ? "border-gray-600 hover:shadow-blue-300"
+                            : "border-gray-300"
                         }`}
                       >
                         <CardHeader className="pb-4">
@@ -462,6 +434,8 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                             {t.by} {book.author.name}
                           </CardDescription>
                         </CardHeader>
+
+                        {/* {card content} */}
                         <CardContent className="pt-0">
                           <div className="flex items-center justify-between mb-3">
                             <Badge
@@ -492,7 +466,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                           >
                             {book.summary}
                           </p>
-
                           {/* Action Buttons */}
                           <div className="flex gap-2">
                             <Button
@@ -526,7 +499,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                   );
                 })}
               </div>
-
               {/* Pagination Controls */}
               {pagination && pagination.totalPages > 1 && (
                 <div className="flex justify-center items-center mt-8 gap-2">
@@ -544,7 +516,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                     <ChevronLeft className="w-4 h-4 mr-1" />
                     {t.previous}
                   </Button>
-
                   {getPageNumbers(currentPage, pagination.totalPages).map(
                     (pageNumber, index) =>
                       pageNumber === "..." ? (
@@ -579,7 +550,6 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                         </Button>
                       )
                   )}
-
                   <Button
                     variant="outline"
                     size="sm"
@@ -600,6 +570,13 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
           )}
         </div>
       </section>
+      {/* UserReviewsSection */}
+      <UserReviewsSection
+        isDarkMode={isDarkMode}
+        language={language}
+        title={t.reviewsTitle}
+        subtitle={t.reviewsSubtitle}
+      />
     </div>
   );
 }

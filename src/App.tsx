@@ -5,17 +5,15 @@ import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Button } from "./components/ui/button";
 import { BookOpen, Moon, Sun } from "lucide-react";
 
-// Import components
+import ScrollOpacityOverlay from "./components/ScrollOpacityOverlay";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Import pages
 import HomePage from "./pages/HomePage";
 import FavoriteBookPage from "./pages/FavoriteBookPage";
 import SearchPage from "./pages/SearchPage";
 import BookDetailPage from "./pages/BookDetailPage";
 
 function App() {
-  // Initialize dark mode from localStorage or default to false
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem("booktrack-darkmode");
     return saved ? JSON.parse(saved) : false;
@@ -28,7 +26,6 @@ function App() {
 
   const { pathname } = useLocation();
 
-  // Translations object
   const translations = {
     id: {
       home: "Beranda",
@@ -40,7 +37,7 @@ function App() {
       home: "Home",
       favorites: "Favorites",
       search: "Search Books",
-      footerText: "Discover and save your favorite books.",
+      footerText: "One More Page, We Promise.",
     },
   };
 
@@ -58,7 +55,6 @@ function App() {
     localStorage.setItem("booktrack-darkmode", JSON.stringify(newDarkMode));
   };
 
-  // Apply dark mode class to document body
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -67,7 +63,6 @@ function App() {
     }
   }, [isDarkMode]);
 
-  // Scroll to top when route changes
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -82,19 +77,15 @@ function App() {
         isDarkMode ? "dark bg-gray-900" : "bg-gray-50"
       }`}
     >
-      {/* Scroll to top component */}
       <ScrollToTop />
 
-      {/* Header - z-index 40 agar selalu di atas */}
       <header
-        className={`shadow-sm border-b transition-colors duration-300 relative z-40 ${
-          isDarkMode
-            ? "bg-gray-800 border-gray-700"
-            : "bg-white border-gray-200"
+        className={`shadow-xl h-23 transition-colors duration-300 relative z-40 ${
+          isDarkMode ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-900"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-23">
             <div className="flex items-center space-x-2">
               <BookOpen
                 className={`h-8 w-8 ${
@@ -149,7 +140,7 @@ function App() {
                 className={`${
                   isDarkMode
                     ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-200"
                 } bg-transparent`}
               >
                 {language === "id" ? "EN" : "ID"}
@@ -161,7 +152,7 @@ function App() {
                 className={`${
                   isDarkMode
                     ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-200"
                 } bg-transparent`}
               >
                 {isDarkMode ? (
@@ -175,7 +166,6 @@ function App() {
         </div>
       </header>
 
-      {/* Routes - Konten utama halaman, z-index 30 agar di atas background animasi */}
       <div className="relative z-30">
         <Routes>
           <Route
@@ -201,10 +191,9 @@ function App() {
         </Routes>
       </div>
 
-      {/* Footer - z-index 40 agar selalu di atas */}
       <footer
         className={`py-8 transition-colors duration-300 relative z-40 ${
-          isDarkMode ? "bg-gray-900 text-white" : "bg-gray-900 text-white"
+          isDarkMode ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-900"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

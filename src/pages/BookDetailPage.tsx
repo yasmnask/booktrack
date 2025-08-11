@@ -271,8 +271,8 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
             onClick={() => navigate(-1)}
             className={`flex items-center gap-2 ${
               isDarkMode
-                ? "bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
-                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
             }`}
           >
             <ArrowLeft className="w-4 h-4" />
@@ -284,7 +284,7 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
         <div
           className={`rounded-lg shadow-sm border p-6 mb-8 ${
             isDarkMode
-              ? "bg-gray-800 border-gray-700"
+              ? "bg-gray-800 border-gray-700 hover:shadow-gray-950"
               : "bg-white border-gray-200"
           }`}
         >
@@ -431,7 +431,11 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
                   <Button
                     variant="outline"
                     onClick={handleShare}
-                    className="bg-transparent"
+                    className={`flex items-center gap-2 ${
+                      isDarkMode
+                        ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                        : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+                    }`}
                   >
                     <Share2 className="w-4 h-4 mr-2" />
                     {t.share}
@@ -670,7 +674,11 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
                           key={index}
                           variant="outline"
                           size="sm"
-                          className="bg-transparent"
+                          className={`flex items-center gap-2 ${
+                            isDarkMode
+                              ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                              : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+                          }`}
                         >
                           <a
                             href={link.url}
