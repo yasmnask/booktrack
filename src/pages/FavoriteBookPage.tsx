@@ -14,6 +14,7 @@ import {
 import { Badge } from "../components/ui/badge";
 import { Star, Heart, ArrowLeft, Search, Filter, BookOpen } from "lucide-react";
 import { useFavorites } from "../hooks/useFavorites";
+import { ScrollReveal } from "../components/ScrollReveal";
 
 interface FavoriteBookPageProps {
   isDarkMode: boolean;
@@ -28,10 +29,8 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
   const [filterGenre, setFilterGenre] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Get unique genres for filter
   const genres = Array.from(new Set(favorites.map((book) => book.genre)));
 
-  // Translations
   const translations = {
     id: {
       backToHome: "Kembali ke Beranda",
@@ -90,7 +89,6 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
 
   const t = translations[language];
 
-  // Show loading state while favorites are being loaded
   if (!isLoaded) {
     return (
       <div
@@ -108,7 +106,6 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
     );
   }
 
-  // Filter and sort favorites
   const filteredAndSortedFavorites = favorites
     .filter((book) => {
       const matchesSearch =
@@ -146,303 +143,333 @@ const FavoriteBookPage = ({ isDarkMode, language }: FavoriteBookPageProps) => {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-6">
-            <Link to="/">
-              <Button
-                variant="outline"
-                size="sm"
-                className={`flex items-center gap-2 ${
-                  isDarkMode
-                    ? "bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
-                    : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                <ArrowLeft className="w-4 h-4" />
-                {t.backToHome}
-              </Button>
-            </Link>
+            <ScrollReveal delay={0.5} animationType="slideLeft">
+              <Link to="/">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`flex items-center gap-2 ${
+                    isDarkMode
+                      ? "bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  {t.backToHome}
+                </Button>
+              </Link>
+            </ScrollReveal>
           </div>
 
           <div className="text-center mb-8">
-            <h1
-              className={`text-3xl sm:text-4xl font-bold mb-4 ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              {t.myFavoriteBooks}
-            </h1>
-            <p
-              className={`text-lg ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              {t.favoriteCollection}
-            </p>
+            <ScrollReveal delay={0.1} animationType="fadeIn">
+              <h1
+                className={`text-3xl sm:text-4xl font-bold mb-4 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {t.myFavoriteBooks}
+              </h1>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1} animationType="fadeIn">
+              <p
+                className={`text-lg ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
+                {t.favoriteCollection}
+              </p>
+            </ScrollReveal>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <div
-              className={`rounded-lg p-6 text-center border ${
-                isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-200"
-              }`}
-            >
+            <ScrollReveal delay={0.1} animationType="slideLeft">
               <div
-                className={`text-2xl font-bold mb-2 ${
-                  isDarkMode ? "text-blue-400" : "text-blue-600"
+                className={`rounded-lg p-6 text-center border ${
+                  isDarkMode
+                    ? "bg-gray-800 border-gray-700"
+                    : "bg-white border-gray-200"
                 }`}
               >
-                {favorites.length}
+                <div
+                  className={`text-2xl font-bold mb-2 ${
+                    isDarkMode ? "text-blue-400" : "text-blue-600"
+                  }`}
+                >
+                  {favorites.length}
+                </div>
+                <div
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {t.totalFavorites}
+                </div>
               </div>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1} animationType="slideUp">
               <div
-                className={`text-sm ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                className={`rounded-lg p-6 text-center border ${
+                  isDarkMode
+                    ? "bg-gray-800 border-gray-700"
+                    : "bg-white border-gray-200"
                 }`}
               >
-                {t.totalFavorites}
+                <div
+                  className={`text-2xl font-bold mb-2 ${
+                    isDarkMode ? "text-green-400" : "text-green-600"
+                  }`}
+                >
+                  {genres.length}
+                </div>
+                <div
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {t.differentGenres}
+                </div>
               </div>
-            </div>
-            <div
-              className={`rounded-lg p-6 text-center border ${
-                isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-200"
-              }`}
-            >
+            </ScrollReveal>
+            <ScrollReveal delay={0.1} animationType="slideRight">
               <div
-                className={`text-2xl font-bold mb-2 ${
-                  isDarkMode ? "text-green-400" : "text-green-600"
+                className={`rounded-lg p-6 text-center border ${
+                  isDarkMode
+                    ? "bg-gray-800 border-gray-700"
+                    : "bg-white border-gray-200"
                 }`}
               >
-                {genres.length}
+                <div
+                  className={`text-2xl font-bold mb-2 ${
+                    isDarkMode ? "text-purple-400" : "text-purple-600"
+                  }`}
+                >
+                  {favorites.length > 0
+                    ? (
+                        favorites.reduce((sum, book) => sum + book.rating, 0) /
+                        favorites.length
+                      ).toFixed(1)
+                    : "0.0"}
+                </div>
+                <div
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {t.averageRating}
+                </div>
               </div>
-              <div
-                className={`text-sm ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                }`}
-              >
-                {t.differentGenres}
-              </div>
-            </div>
-            <div
-              className={`rounded-lg p-6 text-center border ${
-                isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-200"
-              }`}
-            >
-              <div
-                className={`text-2xl font-bold mb-2 ${
-                  isDarkMode ? "text-purple-400" : "text-purple-600"
-                }`}
-              >
-                {favorites.length > 0
-                  ? (
-                      favorites.reduce((sum, book) => sum + book.rating, 0) /
-                      favorites.length
-                    ).toFixed(1)
-                  : "0.0"}
-              </div>
-              <div
-                className={`text-sm ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                }`}
-              >
-                {t.averageRating}
-              </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
         {favorites.length === 0 ? (
-          /* Empty State */
-          <div className="text-center py-16">
-            <BookOpen
-              className={`w-24 h-24 mx-auto mb-6 ${
-                isDarkMode ? "text-gray-600" : "text-gray-300"
-              }`}
-            />
-            <h3
-              className={`text-2xl font-semibold mb-4 ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              {t.noFavoriteBooks}
-            </h3>
-            <p
-              className={`mb-8 max-w-md mx-auto ${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              }`}
-            >
-              {t.noFavoritesDesc}
-            </p>
-            <Link to="/">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                {t.exploreBooks}
-              </Button>
-            </Link>
-          </div>
+          <ScrollReveal delay={1.2} animationType="scaleIn">
+            /* Empty State */
+            <div className="text-center py-16">
+              <BookOpen
+                className={`w-24 h-24 mx-auto mb-6 ${
+                  isDarkMode ? "text-gray-600" : "text-gray-300"
+                }`}
+              />
+              <h3
+                className={`text-2xl font-semibold mb-4 ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {t.noFavoriteBooks}
+              </h3>
+              <p
+                className={`mb-8 max-w-md mx-auto ${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                }`}
+              >
+                {t.noFavoritesDesc}
+              </p>
+              <Link to="/">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  {t.exploreBooks}
+                </Button>
+              </Link>
+            </div>
+          </ScrollReveal>
         ) : (
           <>
-            {/* Search and Filter Controls */}
-            <div
-              className={`rounded-lg p-6 mb-8 border ${
-                isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-white border-gray-200"
-              }`}
-            >
-              <div className="flex flex-col sm:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <input
-                    type="text"
-                    placeholder={t.searchPlaceholder}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
-                      isDarkMode
-                        ? "border-gray-600 bg-gray-700 text-white"
-                        : "border-gray-300 bg-white text-gray-900"
-                    }`}
-                  />
-                </div>
+            <ScrollReveal delay={0.1} animationType="slideUp">
+              {/* Search and Filter Controls */}
+              <div
+                className={`rounded-lg p-6 mb-8 border ${
+                  isDarkMode
+                    ? "bg-gray-800 border-gray-700"
+                    : "bg-white border-gray-200"
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Search */}
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder={t.searchPlaceholder}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-transparent ${
+                        isDarkMode
+                          ? "border-gray-600 bg-gray-700 text-white"
+                          : "border-gray-300 bg-white text-gray-900"
+                      }`}
+                    />
+                  </div>
 
-                {/* Genre Filter */}
-                <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-gray-400" />
+                  {/* Genre Filter */}
+                  <div className="flex items-center gap-2">
+                    <Filter className="w-4 h-4 text-gray-400" />
+                    <select
+                      value={filterGenre}
+                      onChange={(e) => setFilterGenre(e.target.value)}
+                      className={`px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                        isDarkMode
+                          ? "border-gray-600 bg-gray-700 text-white"
+                          : "border-gray-300 bg-white text-gray-900"
+                      }`}
+                    >
+                      <option value="all">{t.allGenres}</option>
+                      {genres.map((genre) => (
+                        <option key={genre} value={genre}>
+                          {genre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Sort */}
                   <select
-                    value={filterGenre}
-                    onChange={(e) => setFilterGenre(e.target.value)}
+                    value={sortBy}
+                    onChange={(e) =>
+                      setSortBy(
+                        e.target.value as
+                          | "title"
+                          | "author"
+                          | "rating"
+                          | "genre"
+                      )
+                    }
                     className={`px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       isDarkMode
                         ? "border-gray-600 bg-gray-700 text-white"
                         : "border-gray-300 bg-white text-gray-900"
                     }`}
                   >
-                    <option value="all">{t.allGenres}</option>
-                    {genres.map((genre) => (
-                      <option key={genre} value={genre}>
-                        {genre}
-                      </option>
-                    ))}
+                    <option value="title">{t.sortTitle}</option>
+                    <option value="author">{t.sortAuthor}</option>
+                    <option value="rating">{t.sortRating}</option>
+                    <option value="genre">{t.sortGenre}</option>
                   </select>
                 </div>
-
-                {/* Sort */}
-                <select
-                  value={sortBy}
-                  onChange={(e) =>
-                    setSortBy(
-                      e.target.value as "title" | "author" | "rating" | "genre"
-                    )
-                  }
-                  className={`px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white"
-                      : "border-gray-300 bg-white text-gray-900"
-                  }`}
-                >
-                  <option value="title">{t.sortTitle}</option>
-                  <option value="author">{t.sortAuthor}</option>
-                  <option value="rating">{t.sortRating}</option>
-                  <option value="genre">{t.sortGenre}</option>
-                </select>
               </div>
-            </div>
+            </ScrollReveal>
 
-            {/* Results Info */}
-            <div className="mb-6">
-              <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
-                {t.showing} {filteredAndSortedFavorites.length} {t.of}{" "}
-                {favorites.length} {t.favoriteBooks}
-              </p>
-            </div>
+            <ScrollReveal delay={0.1} animationType="slideUp">
+              {/* Results Info */}
+              <div className="mb-6">
+                <p className={isDarkMode ? "text-gray-300" : "text-gray-600"}>
+                  {t.showing} {filteredAndSortedFavorites.length} {t.of}{" "}
+                  {favorites.length} {t.favoriteBooks}
+                </p>
+              </div>
+            </ScrollReveal>
 
-            {/* Books Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredAndSortedFavorites.map((book) => (
-                <Link key={book._id} to={`/book/${book._id}`} className="block">
-                  <Card
-                    className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
-                      isDarkMode
-                        ? "bg-gray-800 border-gray-700"
-                        : "bg-white border-gray-200"
-                    }`}
+            <ScrollReveal delay={1.2} animationType="slideUp">
+              {/* Books Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredAndSortedFavorites.map((book) => (
+                  <Link
+                    key={book._id}
+                    to={`/book/${book._id}`}
+                    className="block"
                   >
-                    <CardHeader className="pb-4">
-                      <div className="flex justify-center mb-4">
-                        <img
-                          src={book.cover || "/placeholder.svg"}
-                          alt={book.title}
-                          className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-md shadow-sm hover:scale-105 transition-transform duration-200"
-                        />
-                      </div>
-                      <CardTitle
-                        className={`text-base sm:text-lg font-semibold text-center line-clamp-2 ${
-                          isDarkMode ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        {book.title}
-                      </CardTitle>
-                      <CardDescription
-                        className={`text-center text-sm ${
-                          isDarkMode ? "text-gray-300" : "text-gray-600"
-                        }`}
-                      >
-                        {t.by} {book.author.name}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge
-                          variant="secondary"
-                          className={`text-xs ${
-                            isDarkMode
-                              ? "bg-gray-700 text-gray-300"
-                              : "bg-gray-100 text-gray-700"
+                    <Card
+                      className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
+                        isDarkMode
+                          ? "bg-gray-800 border-gray-700"
+                          : "bg-white border-gray-200"
+                      }`}
+                    >
+                      <CardHeader className="pb-4">
+                        <div className="flex justify-center mb-4">
+                          <img
+                            src={book.cover || "/placeholder.svg"}
+                            alt={book.title}
+                            className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-md shadow-sm hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+                        <CardTitle
+                          className={`text-base sm:text-lg font-semibold text-center line-clamp-2 ${
+                            isDarkMode ? "text-white" : "text-gray-900"
                           }`}
                         >
-                          {book.genre}
-                        </Badge>
-                        <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                          <span
-                            className={`text-sm font-medium ${
-                              isDarkMode ? "text-gray-300" : "text-gray-700"
+                          {book.title}
+                        </CardTitle>
+                        <CardDescription
+                          className={`text-center text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
+                          {t.by} {book.author.name}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <div className="flex items-center justify-between mb-3">
+                          <Badge
+                            variant="secondary"
+                            className={`text-xs ${
+                              isDarkMode
+                                ? "bg-gray-700 text-gray-300"
+                                : "bg-gray-100 text-gray-700"
                             }`}
                           >
-                            {book.rating.toFixed(1)}
-                          </span>
+                            {book.genre}
+                          </Badge>
+                          <div className="flex items-center space-x-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span
+                              className={`text-sm font-medium ${
+                                isDarkMode ? "text-gray-300" : "text-gray-700"
+                              }`}
+                            >
+                              {book.rating.toFixed(1)}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <p
-                        className={`text-xs sm:text-sm mb-4 line-clamp-2 ${
-                          isDarkMode ? "text-gray-400" : "text-gray-600"
-                        }`}
-                      >
-                        {book.description}
-                      </p>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => handleRemoveFromFavorites(e, book._id)}
-                        className={`w-full text-xs sm:text-sm transition-colors bg-transparent ${
-                          isDarkMode
-                            ? "border-red-400 text-red-400 hover:bg-red-500/10"
-                            : "border-red-500 text-red-600 hover:bg-red-50"
-                        }`}
-                      >
-                        <Heart className="w-4 h-4 mr-2 fill-current" />
-                        {t.removeFromFavorites}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))}
-            </div>
+                        <p
+                          className={`text-xs sm:text-sm mb-4 line-clamp-2 ${
+                            isDarkMode ? "text-gray-400" : "text-gray-600"
+                          }`}
+                        >
+                          {book.description}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) =>
+                            handleRemoveFromFavorites(e, book._id)
+                          }
+                          className={`w-full text-xs sm:text-sm transition-colors bg-transparent ${
+                            isDarkMode
+                              ? "border-red-400 text-red-400 hover:bg-red-500/10"
+                              : "border-red-500 text-red-600 hover:bg-red-50"
+                          }`}
+                        >
+                          <Heart className="w-4 h-4 mr-2 fill-current" />
+                          {t.removeFromFavorites}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </ScrollReveal>
 
             {filteredAndSortedFavorites.length === 0 && (
               <div className="text-center py-12">

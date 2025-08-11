@@ -26,6 +26,7 @@ import { convertToFavoriteBook, getBookRating } from "../utils/bookUtils";
 import type { Book } from "../types/book";
 import AnimatedBooks from "../components/AnimatedBooks";
 import UserReviewsSection from "../components/UserReviewsSection";
+import { ScrollReveal } from "../components/ScrollReveal";
 
 interface HomePageProps {
   isDarkMode: boolean;
@@ -261,131 +262,143 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
               : "bg-gray-100 text-gray-700"
           }`}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 relative z-10">
-          <h2
-            className={`tracking-tighter sm:text-5xl text-4xl lg:text-6xl font-bold mb-6 ${
-              isDarkMode ? "text-white" : "text-gray-900"
-            }`}
-          >
-            {t.heroTitle}
-          </h2>
-          <p
-            className={`text-xl sm:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed ${
-              isDarkMode ? "text-gray-200" : "text-gray-700"
-            }`}
-          >
-            {t.heroSubtitle}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <Link to="/search">
-              <Button
-                size="lg"
-                className={`text-lg px-8 py-4 ${
-                  isDarkMode
-                    ? "bg-blue-600 hover:bg-blue-700"
-                    : "bg-gray-900 hover:bg-gray-800"
-                } text-white shadow-lg`}
-              >
-                <Search className="w-5 h-5 mr-3" />
-                {t.searchBooks}
-              </Button>
-            </Link>
-            <Link to="/favorites">
-              <Button
-                variant="outline"
-                size="lg"
-                className={`text-lg px-8 py-4 ${
-                  isDarkMode
-                    ? "border-gray-300 text-gray-200 hover:bg-gray-700/50 bg-gray-800/50"
-                    : "border-gray-600 text-gray-800 hover:bg-gray-100/50 bg-white/50"
-                } backdrop-blur-sm shadow-lg`}
-              >
-                {t.viewFavorites}
-              </Button>
-            </Link>
-          </div>
-          <div className="animate-bounce mt-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mx-auto w-8 h-8"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke={isDarkMode ? "#D1D5DB" : "#4B5563"}
-              strokeWidth={1.5}
+        <ScrollReveal delay={0.1} duration={0.2} animationType="fadeIn">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 relative z-10">
+            <h2
+              className={`tracking-tighter sm:text-5xl text-4xl lg:text-6xl font-bold mb-6 ${
+                isDarkMode ? "text-white" : "text-gray-900"
+              }`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 6.75V17.25C3 18.4934 4.00659 19.5 5.25 19.5H18.75C19.9934 19.5 21 18.4934 21 17.25V6.75M3 6.75C3 5.50659 4.00659 4.5 5.25 4.5H18.75C19.9934 4.5 21 5.50659 21 6.75M3 6.75L12 13.5L21 6.75"
-              />
-            </svg>
+              {t.heroTitle}
+            </h2>
+            <p
+              className={`text-xl sm:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed ${
+                isDarkMode ? "text-gray-200" : "text-gray-700"
+              }`}
+            >
+              {t.heroSubtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+              <Link to="/search">
+                <Button
+                  size="lg"
+                  className={`text-lg px-8 py-4 ${
+                    isDarkMode
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-gray-900 hover:bg-gray-800"
+                  } text-white shadow-lg`}
+                >
+                  <Search className="w-5 h-5 mr-3" />
+                  {t.searchBooks}
+                </Button>
+              </Link>
+              <Link to="/favorites">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className={`text-lg px-8 py-4 ${
+                    isDarkMode
+                      ? "border-gray-300 text-gray-200 hover:bg-gray-700/50 bg-gray-800/50"
+                      : "border-gray-600 text-gray-800 hover:bg-gray-100/50 bg-white/50"
+                  } backdrop-blur-sm shadow-lg`}
+                >
+                  {t.viewFavorites}
+                </Button>
+              </Link>
+            </div>
+            <div className="animate-bounce mt-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mx-auto w-8 h-8"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={isDarkMode ? "#D1D5DB" : "#4B5563"}
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 6.75V17.25C3 18.4934 4.00659 19.5 5.25 19.5H18.75C19.9934 19.5 21 18.4934 21 17.25V6.75M3 6.75C3 5.50659 4.00659 4.5 5.25 4.5H18.75C19.9934 4.5 21 5.50659 21 6.75M3 6.75L12 13.5L21 6.75"
+                />
+              </svg>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
       {/* Books Section (konten utama, z-index 30) */}
       <section ref={popularBooksRef} className="py-16 relative z-30">
         {" "}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h3
-              className={`text-xl font-bold tracking-tighter sm:text-4xl ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              {t.popularBooksTitle}
-            </h3>
-            <p
-              className={`${
-                isDarkMode ? "text-gray-300" : "text-gray-600"
-              } mb-8`}
-            >
-              {t.popularBooksSubtitle}
-            </p>
+            <ScrollReveal delay={0.1} animationType="slideUp">
+              <h3
+                className={`text-xl font-bold tracking-tighter sm:text-4xl ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {t.popularBooksTitle}
+              </h3>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1} animationType="slideUp">
+              <p
+                className={`${
+                  isDarkMode ? "text-gray-300" : "text-gray-600"
+                } mb-8`}
+              >
+                {t.popularBooksSubtitle}
+              </p>
+            </ScrollReveal>
           </div>
           {/* Book Count Display */}
           {pagination && !loading && !error && (
             <div className="text-center mb-12">
-              <p
-                className={`inline-block px-4 py-2 rounded-lg text-base font-medium ${
-                  isDarkMode
-                    ? "bg-gray-700 text-gray-300"
-                    : "bg-gray-100 text-gray-600"
-                }`}
-              >
-                {t.showingBooks}{" "}
-                <span className="font-bold">{books.length}</span>{" "}
-                {t.ofTotalBooks}{" "}
-                <span className="font-bold">{pagination.totalItems}</span>{" "}
-                {t.totalBooksAvailable}
-              </p>
+              <ScrollReveal delay={0.1} animationType="slideUp">
+                <p
+                  className={`inline-block px-4 py-2 rounded-lg text-base font-medium ${
+                    isDarkMode
+                      ? "bg-gray-700 text-gray-300"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {t.showingBooks}{" "}
+                  <span className="font-bold">{books.length}</span>{" "}
+                  {t.ofTotalBooks}{" "}
+                  <span className="font-bold">{pagination.totalItems}</span>{" "}
+                  {t.totalBooksAvailable}
+                </p>
+              </ScrollReveal>
             </div>
           )}
           {/* Loading State */}
           {loading && (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-              <span
-                className={`ml-2 ${
-                  isDarkMode ? "text-gray-300" : "text-gray-600"
-                }`}
-              >
-                {t.loading}
-              </span>
+              <ScrollReveal delay={0.1} animationType="slideUp">
+                <span
+                  className={`ml-2 ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {t.loading}
+                </span>
+              </ScrollReveal>
             </div>
           )}
           {/* Error State */}
           {error && (
             <div className="text-center py-12">
-              <p
-                className={`mb-4 ${
-                  isDarkMode ? "text-red-400" : "text-red-600"
-                }`}
-              >
-                {t.errorLoading}: {error}
-              </p>
-              <Button onClick={retryFetch} variant="outline">
-                {t.tryAgain}
-              </Button>
+              <ScrollReveal animationType="slideUp">
+                <p
+                  className={`mb-4 ${
+                    isDarkMode ? "text-red-400" : "text-red-600"
+                  }`}
+                >
+                  {t.errorLoading}: {error}
+                </p>
+                <Button onClick={retryFetch} variant="outline">
+                  {t.tryAgain}
+                </Button>
+              </ScrollReveal>
             </div>
           )}
           {/* Books Grid */}
@@ -404,97 +417,101 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                       className="block"
                       onClick={() => trackActivity(book._id, "view", book)} // Track view activity
                     >
-                      <Card
-                        className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
-                          isDarkMode
-                            ? "border-gray-600 hover:shadow-blue-300"
-                            : "border-gray-300"
-                        }`}
-                      >
-                        <CardHeader className="pb-4">
-                          <div className="flex justify-center mb-4">
-                            <img
-                              src={book.cover_image || "/placeholder.svg"}
-                              alt={book.title}
-                              className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-md shadow-sm hover:scale-105 transition-transform duration-200"
-                            />
-                          </div>
-                          <CardTitle
-                            className={`text-base sm:text-lg font-semibold text-center line-clamp-2 ${
-                              isDarkMode ? "text-white" : "text-gray-900"
-                            }`}
-                          >
-                            {book.title}
-                          </CardTitle>
-                          <CardDescription
-                            className={`text-center text-sm ${
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }`}
-                          >
-                            {t.by} {book.author.name}
-                          </CardDescription>
-                        </CardHeader>
-
-                        {/* {card content} */}
-                        <CardContent className="pt-0">
-                          <div className="flex items-center justify-between mb-3">
-                            <Badge
-                              variant="secondary"
-                              className={`text-xs ${
-                                isDarkMode
-                                  ? "bg-gray-700 text-gray-300"
-                                  : "bg-gray-100 text-gray-700"
+                      <ScrollReveal delay={0.1} animationType="slideUp">
+                        <Card
+                          className={`hover:shadow-lg transition-all duration-300 cursor-pointer ${
+                            isDarkMode
+                              ? "border-gray-600 hover:shadow-blue-300"
+                              : "border-gray-300"
+                          }`}
+                        >
+                          <CardHeader className="pb-4">
+                            <div className="flex justify-center mb-4">
+                              <img
+                                src={book.cover_image || "/placeholder.svg"}
+                                alt={book.title}
+                                className="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-md shadow-sm hover:scale-105 transition-transform duration-200"
+                              />
+                            </div>
+                            <CardTitle
+                              className={`text-base sm:text-lg font-semibold text-center line-clamp-2 ${
+                                isDarkMode ? "text-white" : "text-gray-900"
                               }`}
                             >
-                              {book.category?.name || "Unknown"}
-                            </Badge>
-                            <div className="flex items-center space-x-1">
-                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              <span
-                                className={`text-sm font-medium ${
-                                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                              {book.title}
+                            </CardTitle>
+                            <CardDescription
+                              className={`text-center text-sm ${
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }`}
+                            >
+                              {t.by} {book.author.name}
+                            </CardDescription>
+                          </CardHeader>
+
+                          {/* {card content} */}
+                          <CardContent className="pt-0">
+                            <div className="flex items-center justify-between mb-3">
+                              <Badge
+                                variant="secondary"
+                                className={`text-xs ${
+                                  isDarkMode
+                                    ? "bg-gray-700 text-gray-300"
+                                    : "bg-gray-100 text-gray-700"
                                 }`}
                               >
-                                {bookRating.toFixed(1)}
-                              </span>
+                                {book.category?.name || "Unknown"}
+                              </Badge>
+                              <div className="flex items-center space-x-1">
+                                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                <span
+                                  className={`text-sm font-medium ${
+                                    isDarkMode
+                                      ? "text-gray-300"
+                                      : "text-gray-700"
+                                  }`}
+                                >
+                                  {bookRating.toFixed(1)}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                          <p
-                            className={`text-xs sm:text-sm mb-4 line-clamp-2 ${
-                              isDarkMode ? "text-gray-400" : "text-gray-600"
-                            }`}
-                          >
-                            {book.summary}
-                          </p>
-                          {/* Action Buttons */}
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={(e) => handleFavoriteClick(e, book)}
-                              disabled={!favoritesLoaded}
-                              className={`flex-1 text-xs sm:text-sm transition-colors ${
-                                isBookFavorite
-                                  ? isDarkMode
-                                    ? "border-red-500 text-red-400 hover:bg-red-500/10"
-                                    : "border-red-500 text-red-600 hover:bg-red-50"
-                                  : isDarkMode
-                                  ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                              } bg-transparent`}
+                            <p
+                              className={`text-xs sm:text-sm mb-4 line-clamp-2 ${
+                                isDarkMode ? "text-gray-400" : "text-gray-600"
+                              }`}
                             >
-                              <Heart
-                                className={`w-4 h-4 mr-2 ${
-                                  isBookFavorite ? "fill-current" : ""
-                                }`}
-                              />
-                              {isBookFavorite
-                                ? t.removeFromFavorites
-                                : t.addToFavorites}
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
+                              {book.summary}
+                            </p>
+                            {/* Action Buttons */}
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={(e) => handleFavoriteClick(e, book)}
+                                disabled={!favoritesLoaded}
+                                className={`flex-1 text-xs sm:text-sm transition-colors ${
+                                  isBookFavorite
+                                    ? isDarkMode
+                                      ? "border-red-500 text-red-400 hover:bg-red-500/10"
+                                      : "border-red-500 text-red-600 hover:bg-red-50"
+                                    : isDarkMode
+                                    ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                                } bg-transparent`}
+                              >
+                                <Heart
+                                  className={`w-4 h-4 mr-2 ${
+                                    isBookFavorite ? "fill-current" : ""
+                                  }`}
+                                />
+                                {isBookFavorite
+                                  ? t.removeFromFavorites
+                                  : t.addToFavorites}
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </ScrollReveal>
                     </Link>
                   );
                 })}
@@ -502,20 +519,22 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
               {/* Pagination Controls */}
               {pagination && pagination.totalPages > 1 && (
                 <div className="flex justify-center items-center mt-8 gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={!pagination.hasPrevPage || loading}
-                    className={`bg-transparent ${
-                      isDarkMode
-                        ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    <ChevronLeft className="w-4 h-4 mr-1" />
-                    {t.previous}
-                  </Button>
+                  <ScrollReveal delay={0.1} animationType="slideUp">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={!pagination.hasPrevPage || loading}
+                      className={`bg-transparent ${
+                        isDarkMode
+                          ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                          : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <ChevronLeft className="w-4 h-4 mr-1" />
+                      {t.previous}
+                    </Button>
+                  </ScrollReveal>
                   {getPageNumbers(currentPage, pagination.totalPages).map(
                     (pageNumber, index) =>
                       pageNumber === "..." ? (
@@ -528,55 +547,63 @@ export default function HomePage({ isDarkMode, language }: HomePageProps) {
                           ...
                         </span>
                       ) : (
-                        <Button
-                          key={pageNumber}
-                          variant={
-                            pageNumber === currentPage ? "default" : "outline"
-                          }
-                          size="sm"
-                          onClick={() => handlePageChange(pageNumber as number)}
-                          disabled={loading}
-                          className={
-                            pageNumber === currentPage
-                              ? "bg-blue-600 text-white hover:bg-blue-700"
-                              : `bg-transparent ${
-                                  isDarkMode
-                                    ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                                    : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                                }`
-                          }
-                        >
-                          {pageNumber}
-                        </Button>
+                        <ScrollReveal delay={0.1} animationType="slideUp">
+                          <Button
+                            key={pageNumber}
+                            variant={
+                              pageNumber === currentPage ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() =>
+                              handlePageChange(pageNumber as number)
+                            }
+                            disabled={loading}
+                            className={
+                              pageNumber === currentPage
+                                ? "bg-blue-600 text-white hover:bg-blue-700"
+                                : `bg-transparent ${
+                                    isDarkMode
+                                      ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                                  }`
+                            }
+                          >
+                            {pageNumber}
+                          </Button>
+                        </ScrollReveal>
                       )
                   )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={!pagination.hasNextPage || loading}
-                    className={`bg-transparent ${
-                      isDarkMode
-                        ? "border-gray-600 text-gray-300 hover:bg-gray-700"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                    }`}
-                  >
-                    {t.next}
-                    <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
+                  <ScrollReveal delay={0.1} animationType="slideUp">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={!pagination.hasNextPage || loading}
+                      className={`bg-transparent ${
+                        isDarkMode
+                          ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                          : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      {t.next}
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </ScrollReveal>
                 </div>
               )}
             </>
           )}
         </div>
       </section>
-      {/* UserReviewsSection */}
-      <UserReviewsSection
-        isDarkMode={isDarkMode}
-        language={language}
-        title={t.reviewsTitle}
-        subtitle={t.reviewsSubtitle}
-      />
+      <ScrollReveal delay={0.1} animationType="slideUp">
+        {/* UserReviewsSection */}
+        <UserReviewsSection
+          isDarkMode={isDarkMode}
+          language={language}
+          title={t.reviewsTitle}
+          subtitle={t.reviewsSubtitle}
+        />
+      </ScrollReveal>
     </div>
   );
 }

@@ -3,15 +3,14 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation, Link } from "react-router-dom";
 import { Button } from "./components/ui/button";
-import { BookOpen, Moon, Sun } from "lucide-react";
 
-import ScrollOpacityOverlay from "./components/ScrollOpacityOverlay";
 import ScrollToTop from "./components/ScrollToTop";
 
 import HomePage from "./pages/HomePage";
 import FavoriteBookPage from "./pages/FavoriteBookPage";
 import SearchPage from "./pages/SearchPage";
 import BookDetailPage from "./pages/BookDetailPage";
+import { BookOpen, Moon, Sun, Menu, X } from "lucide-react";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -25,6 +24,7 @@ function App() {
   });
 
   const { pathname } = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const translations = {
     id: {
@@ -80,12 +80,13 @@ function App() {
       <ScrollToTop />
 
       <header
-        className={`shadow-xl h-23 transition-colors duration-300 relative z-40 ${
+        className={`shadow-xl h-23 transition-colors duration-300 relative z-50 ${
           isDarkMode ? "bg-gray-900 text-gray-300" : "bg-gray-100 text-gray-900"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-23">
+            {/* Logo */}
             <div className="flex items-center space-x-2">
               <BookOpen
                 className={`h-8 w-8 ${
@@ -100,39 +101,43 @@ function App() {
                 BookTrack
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <nav className="hidden md:flex space-x-8">
-                <Link
-                  to="/"
-                  className={`transition-colors ${
-                    isDarkMode
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {t.home}
-                </Link>
-                <Link
-                  to="/search"
-                  className={`transition-colors ${
-                    isDarkMode
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {t.search}
-                </Link>
-                <Link
-                  to="/favorites"
-                  className={`transition-colors ${
-                    isDarkMode
-                      ? "text-gray-300 hover:text-white"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  {t.favorites}
-                </Link>
-              </nav>
+
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex space-x-8">
+              <Link
+                to="/"
+                className={`transition-colors ${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.home}
+              </Link>
+              <Link
+                to="/search"
+                className={`transition-colors ${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.search}
+              </Link>
+              <Link
+                to="/favorites"
+                className={`transition-colors ${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.favorites}
+              </Link>
+            </nav>
+
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center space-x-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -162,8 +167,103 @@ function App() {
                 )}
               </Button>
             </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              className="md:hidden p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div
+            className={`md:hidden absolute top-full left-0 w-full ${
+              isDarkMode ? "bg-gray-900" : "bg-gray-100"
+            } shadow-lg`}
+          >
+            <div className="flex flex-col space-y-4 p-4">
+              <Link
+                to="/"
+                onClick={() => setIsMenuOpen(false)}
+                className={`${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.home}
+              </Link>
+              <Link
+                to="/search"
+                onClick={() => setIsMenuOpen(false)}
+                className={`${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.search}
+              </Link>
+              <Link
+                to="/favorites"
+                onClick={() => setIsMenuOpen(false)}
+                className={`${
+                  isDarkMode
+                    ? "text-gray-300 hover:text-white"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {t.favorites}
+              </Link>
+
+              {/* Mobile Actions */}
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    toggleLanguage();
+                    setIsMenuOpen(false);
+                  }}
+                  className={`${
+                    isDarkMode
+                      ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                      : "border-gray-300 text-gray-700 hover:bg-gray-200"
+                  } bg-transparent w-full`}
+                >
+                  {language === "id" ? "EN" : "ID"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    toggleDarkMode();
+                    setIsMenuOpen(false);
+                  }}
+                  className={`${
+                    isDarkMode
+                      ? "border-gray-600 text-gray-300 hover:bg-gray-700"
+                      : "border-gray-300 text-gray-700 hover:bg-gray-200"
+                  } bg-transparent w-full`}
+                >
+                  {isDarkMode ? (
+                    <Sun className="h-4 w-4" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <div className="relative z-30">

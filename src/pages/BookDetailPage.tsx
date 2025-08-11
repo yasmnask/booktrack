@@ -26,6 +26,7 @@ import {
   formatPrice,
 } from "../utils/bookUtils";
 import type { Book } from "../types/book";
+import { ScrollReveal } from "../components/ScrollReveal";
 
 interface BookDetailPageProps {
   isDarkMode: boolean;
@@ -43,7 +44,6 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
     "overview"
   );
 
-  // Translations
   const translations = {
     id: {
       bookNotFound: "Buku Tidak Ditemukan",
@@ -119,7 +119,6 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
 
   const t = translations[language];
 
-  // Fetch book data
   useEffect(() => {
     const fetchBook = async () => {
       if (!bookId) return;
@@ -220,7 +219,6 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
         url: window.location.href,
       });
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
       alert(t.linkCopied);
     }
@@ -232,495 +230,510 @@ const BookDetailPage = ({ isDarkMode, language }: BookDetailPageProps) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-8 text-sm">
-          <Link
-            to="/"
-            className={`hover:underline ${
-              isDarkMode ? "text-blue-400" : "text-blue-600"
-            }`}
-          >
-            {t.home}
-          </Link>
-          <span className={isDarkMode ? "text-gray-400" : "text-gray-400"}>
-            /
-          </span>
-          <Link
-            to="/search"
-            className={`hover:underline ${
-              isDarkMode ? "text-blue-400" : "text-blue-600"
-            }`}
-          >
-            {t.searchBooks}
-          </Link>
-          <span className={isDarkMode ? "text-gray-400" : "text-gray-400"}>
-            /
-          </span>
-          <span
-            className={`truncate ${
-              isDarkMode ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
-            {book.title}
-          </span>
-        </div>
+        <ScrollReveal delay={0.5} animationType="slideLeft">
+          <div className="flex items-center gap-2 mb-8 text-sm">
+            <Link
+              to="/"
+              className={`hover:underline ${
+                isDarkMode ? "text-blue-400" : "text-blue-600"
+              }`}
+            >
+              {t.home}
+            </Link>
+            <span className={isDarkMode ? "text-gray-400" : "text-gray-400"}>
+              /
+            </span>
+            <Link
+              to="/search"
+              className={`hover:underline ${
+                isDarkMode ? "text-blue-400" : "text-blue-600"
+              }`}
+            >
+              {t.searchBooks}
+            </Link>
+            <span className={isDarkMode ? "text-gray-400" : "text-gray-400"}>
+              /
+            </span>
+            <span
+              className={`truncate ${
+                isDarkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
+              {book.title}
+            </span>
+          </div>
 
-        {/* Back Button */}
-        <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate(-1)}
-            className={`flex items-center gap-2 ${
+          {/* Back Button */}
+          <div className="mb-6">
+            <Button
+              variant="outline"
+              onClick={() => navigate(-1)}
+              className={`flex items-center gap-2 ${
+                isDarkMode
+                  ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                  : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+              }`}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              {t.back}
+            </Button>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.5} animationType="slideUp">
+          {/* Book Header */}
+          <div
+            className={`rounded-lg shadow-sm border p-6 mb-8 ${
               isDarkMode
-                ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
-                : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+                ? "bg-gray-800 border-gray-700 hover:shadow-gray-950"
+                : "bg-white border-gray-200"
             }`}
           >
-            <ArrowLeft className="w-4 h-4" />
-            {t.back}
-          </Button>
-        </div>
-
-        {/* Book Header */}
-        <div
-          className={`rounded-lg shadow-sm border p-6 mb-8 ${
-            isDarkMode
-              ? "bg-gray-800 border-gray-700 hover:shadow-gray-950"
-              : "bg-white border-gray-200"
-          }`}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Book Cover */}
-            <div className="lg:col-span-1">
-              <div className="flex justify-center lg:justify-start">
-                <img
-                  src={book.cover_image || "/placeholder.svg"}
-                  alt={book.title}
-                  className="w-64 h-96 object-cover rounded-lg shadow-lg"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Book Cover */}
+              <div className="lg:col-span-1">
+                <div className="flex justify-center lg:justify-start">
+                  <img
+                    src={book.cover_image || "/placeholder.svg"}
+                    alt={book.title}
+                    className="w-64 h-96 object-cover rounded-lg shadow-lg"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Book Info */}
-            <div className="lg:col-span-2">
-              <div className="flex flex-col h-full">
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h1
-                        className={`text-3xl sm:text-4xl font-bold mb-2 ${
-                          isDarkMode ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        {book.title}
-                      </h1>
-                      <p
-                        className={`text-xl mb-4 ${
+              {/* Book Info */}
+              <div className="lg:col-span-2">
+                <div className="flex flex-col h-full">
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h1
+                          className={`text-3xl sm:text-4xl font-bold mb-2 ${
+                            isDarkMode ? "text-white" : "text-gray-900"
+                          }`}
+                        >
+                          {book.title}
+                        </h1>
+                        <p
+                          className={`text-xl mb-4 ${
+                            isDarkMode ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
+                          {t.by}{" "}
+                          <span className="font-semibold">
+                            {book.author.name}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Rating & Genre */}
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                              key={star}
+                              className={`w-5 h-5 ${
+                                star <= Math.round(bookRating)
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : isDarkMode
+                                  ? "text-gray-600"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span
+                          className={`text-lg font-semibold ${
+                            isDarkMode ? "text-white" : "text-gray-900"
+                          }`}
+                        >
+                          {bookRating.toFixed(1)}
+                        </span>
+                      </div>
+                      {book.category?.name && (
+                        <Badge
+                          variant="secondary"
+                          className={`text-sm ${
+                            isDarkMode ? "text-white" : "text-gray-600"
+                          }`}
+                        >
+                          {book.category.name}
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Description */}
+                    <p
+                      className={`text-lg leading-relaxed mb-6 ${
+                        isDarkMode ? "text-gray-300" : "text-gray-600"
+                      }`}
+                    >
+                      {book.summary}
+                    </p>
+
+                    {/* Book Details */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                      {book.details.published_date && (
+                        <div
+                          className={`flex items-center gap-2 text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
+                          <Calendar className="w-4 h-4" />
+                          <span>{book.details.published_date}</span>
+                        </div>
+                      )}
+                      {book.details.total_pages && (
+                        <div
+                          className={`flex items-center gap-2 text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
+                          <BookOpen className="w-4 h-4" />
+                          <span>{book.details.total_pages}</span>
+                        </div>
+                      )}
+                      {book.details.price && (
+                        <div
+                          className={`flex items-center gap-2 text-sm ${
+                            isDarkMode ? "text-gray-300" : "text-gray-600"
+                          }`}
+                        >
+                          <span className="font-semibold text-green-600">
+                            {formatPrice(book.details.price)}
+                          </span>
+                        </div>
+                      )}
+                      <div
+                        className={`flex items-center gap-2 text-sm ${
                           isDarkMode ? "text-gray-300" : "text-gray-600"
                         }`}
                       >
-                        {t.by}{" "}
-                        <span className="font-semibold">
-                          {book.author.name}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Rating & Genre */}
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`w-5 h-5 ${
-                              star <= Math.round(bookRating)
-                                ? "fill-yellow-400 text-yellow-400"
-                                : isDarkMode
-                                ? "text-gray-600"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
+                        <Building className="w-4 h-4" />
+                        <span>{book.publisher}</span>
                       </div>
-                      <span
-                        className={`text-lg font-semibold ${
-                          isDarkMode ? "text-white" : "text-gray-900"
-                        }`}
-                      >
-                        {bookRating.toFixed(1)}
-                      </span>
                     </div>
-                    {book.category?.name && (
-                      <Badge variant="secondary" className="text-sm">
-                        {book.category.name}
-                      </Badge>
-                    )}
                   </div>
 
-                  {/* Description */}
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button
+                      onClick={handleFavoriteClick}
+                      className={`flex-1 ${
+                        isBookFavorite
+                          ? "bg-red-600 hover:bg-red-700 text-white"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                      }`}
+                    >
+                      <Heart
+                        className={`w-4 h-4 mr-2 ${
+                          isBookFavorite ? "fill-current" : ""
+                        }`}
+                      />
+                      {isBookFavorite
+                        ? t.removeFromFavorites
+                        : t.addToFavorites}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleShare}
+                      className={`flex items-center gap-2 ${
+                        isDarkMode
+                          ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                          : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+                      }`}
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      {t.share}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.5} animationType="slideUp">
+          {/* Tabs */}
+          <div
+            className={`rounded-lg shadow-sm border mb-8 ${
+              isDarkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-gray-200"
+            }`}
+          >
+            <div
+              className={`border-b ${
+                isDarkMode ? "border-gray-700" : "border-gray-200"
+              }`}
+            >
+              <nav className="flex space-x-8 px-6">
+                <button
+                  onClick={() => setActiveTab("overview")}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === "overview"
+                      ? isDarkMode
+                        ? "border-blue-400 text-blue-400"
+                        : "border-blue-500 text-blue-600"
+                      : isDarkMode
+                      ? "border-transparent text-gray-400 hover:text-gray-300"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {t.overview}
+                </button>
+                <button
+                  onClick={() => setActiveTab("reviews")}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === "reviews"
+                      ? isDarkMode
+                        ? "border-blue-400 text-blue-400"
+                        : "border-blue-500 text-blue-600"
+                      : isDarkMode
+                      ? "border-transparent text-gray-400 hover:text-gray-300"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {t.reviews}
+                </button>
+              </nav>
+            </div>
+
+            <div className="p-6">
+              {activeTab === "overview" && (
+                <div>
+                  <h3
+                    className={`text-xl font-semibold mb-4 ${
+                      isDarkMode ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    {t.aboutBook}
+                  </h3>
                   <p
-                    className={`text-lg leading-relaxed mb-6 ${
+                    className={`leading-relaxed mb-6 ${
                       isDarkMode ? "text-gray-300" : "text-gray-600"
                     }`}
                   >
                     {book.summary}
                   </p>
 
-                  {/* Book Details */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                    {book.details.published_date && (
-                      <div
-                        className={`flex items-center gap-2 text-sm ${
-                          isDarkMode ? "text-gray-300" : "text-gray-600"
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4
+                        className={`font-semibold mb-3 ${
+                          isDarkMode ? "text-white" : "text-gray-900"
                         }`}
                       >
-                        <Calendar className="w-4 h-4" />
-                        <span>{book.details.published_date}</span>
+                        {t.publicationDetails}
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        {book.details.isbn && (
+                          <div className="flex items-center gap-2">
+                            <Hash className="w-4 h-4 text-gray-400" />
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {t.isbn}: {book.details.isbn}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <Building className="w-4 h-4 text-gray-400" />
+                          <span
+                            className={
+                              isDarkMode ? "text-gray-300" : "text-gray-600"
+                            }
+                          >
+                            {t.publisher}: {book.publisher}
+                          </span>
+                        </div>
+                        {book.details.published_date && (
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-400" />
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {t.publishedDate}: {book.details.published_date}
+                            </span>
+                          </div>
+                        )}
+                        {book.details.price && (
+                          <div className="flex items-center gap-2">
+                            <span className="w-4 h-4 text-green-600 font-bold">
+                              $
+                            </span>
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {t.price}: {formatPrice(book.details.price)}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    )}
-                    {book.details.total_pages && (
-                      <div
-                        className={`flex items-center gap-2 text-sm ${
-                          isDarkMode ? "text-gray-300" : "text-gray-600"
+                    </div>
+
+                    <div>
+                      <h4
+                        className={`font-semibold mb-3 ${
+                          isDarkMode ? "text-white" : "text-gray-900"
                         }`}
                       >
-                        <BookOpen className="w-4 h-4" />
-                        <span>{book.details.total_pages}</span>
+                        {t.specifications}
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        {book.details.total_pages && (
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4 text-gray-400" />
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {book.details.total_pages}
+                            </span>
+                          </div>
+                        )}
+                        {book.details.size && (
+                          <div className="flex items-center gap-2">
+                            <Globe className="w-4 h-4 text-gray-400" />
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {language === "id" ? "Ukuran" : "Size"}:{" "}
+                              {book.details.size}
+                            </span>
+                          </div>
+                        )}
+                        {book.details.format && (
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="w-4 h-4 text-gray-400" />
+                            <span
+                              className={
+                                isDarkMode ? "text-gray-300" : "text-gray-600"
+                              }
+                            >
+                              {t.format}: {book.details.format}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <Star className="w-4 h-4 text-gray-400" />
+                          <span
+                            className={
+                              isDarkMode ? "text-gray-300" : "text-gray-600"
+                            }
+                          >
+                            {t.rating}: {bookRating.toFixed(1)}/5
+                          </span>
+                        </div>
                       </div>
-                    )}
-                    {book.details.price && (
-                      <div
-                        className={`flex items-center gap-2 text-sm ${
-                          isDarkMode ? "text-gray-300" : "text-gray-600"
-                        }`}
-                      >
-                        <span className="font-semibold text-green-600">
-                          {formatPrice(book.details.price)}
-                        </span>
-                      </div>
-                    )}
-                    <div
-                      className={`flex items-center gap-2 text-sm ${
-                        isDarkMode ? "text-gray-300" : "text-gray-600"
-                      }`}
-                    >
-                      <Building className="w-4 h-4" />
-                      <span>{book.publisher}</span>
                     </div>
                   </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    onClick={handleFavoriteClick}
-                    className={`flex-1 ${
-                      isBookFavorite
-                        ? "bg-red-600 hover:bg-red-700 text-white"
-                        : "bg-blue-600 hover:bg-blue-700 text-white"
+                  {/* Tags */}
+                  {book.tags && book.tags.length > 0 && (
+                    <div className="mt-6">
+                      <h4
+                        className={`font-semibold mb-3 ${
+                          isDarkMode ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {t.tags}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.tags.map((tag, index) => (
+                          <Badge
+                            key={index}
+                            variant="outline"
+                            className={`text-xs ${
+                              isDarkMode
+                                ? "border-gray-600 text-gray-300"
+                                : "border-gray-300 text-gray-600"
+                            }`}
+                          >
+                            {tag.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Buy Links */}
+                  {book.buy_links && book.buy_links.length > 0 && (
+                    <div className="mt-6">
+                      <h4
+                        className={`font-semibold mb-3 ${
+                          isDarkMode ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {t.buyLinks}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.buy_links.map((link, index) => (
+                          <Button
+                            key={index}
+                            variant="outline"
+                            size="sm"
+                            className={`flex items-center gap-2 ${
+                              isDarkMode
+                                ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
+                                : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
+                            }`}
+                          >
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                              {link.store}
+                            </a>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === "reviews" && (
+                <div>
+                  <h3
+                    className={`text-xl font-semibold mb-6 ${
+                      isDarkMode ? "text-white" : "text-gray-900"
                     }`}
                   >
-                    <Heart
-                      className={`w-4 h-4 mr-2 ${
-                        isBookFavorite ? "fill-current" : ""
+                    {t.readerReviews}
+                  </h3>
+
+                  <div className="text-center py-8">
+                    <MessageCircle
+                      className={`w-16 h-16 mx-auto mb-4 ${
+                        isDarkMode ? "text-gray-600" : "text-gray-300"
                       }`}
                     />
-                    {isBookFavorite ? t.removeFromFavorites : t.addToFavorites}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={handleShare}
-                    className={`flex items-center gap-2 ${
-                      isDarkMode
-                        ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
-                        : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
-                    }`}
-                  >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    {t.share}
-                  </Button>
+                    <p
+                      className={isDarkMode ? "text-gray-400" : "text-gray-500"}
+                    >
+                      {t.noReviews}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
-        </div>
-
-        {/* Tabs */}
-        <div
-          className={`rounded-lg shadow-sm border mb-8 ${
-            isDarkMode
-              ? "bg-gray-800 border-gray-700"
-              : "bg-white border-gray-200"
-          }`}
-        >
-          <div
-            className={`border-b ${
-              isDarkMode ? "border-gray-700" : "border-gray-200"
-            }`}
-          >
-            <nav className="flex space-x-8 px-6">
-              <button
-                onClick={() => setActiveTab("overview")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "overview"
-                    ? isDarkMode
-                      ? "border-blue-400 text-blue-400"
-                      : "border-blue-500 text-blue-600"
-                    : isDarkMode
-                    ? "border-transparent text-gray-400 hover:text-gray-300"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {t.overview}
-              </button>
-              <button
-                onClick={() => setActiveTab("reviews")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "reviews"
-                    ? isDarkMode
-                      ? "border-blue-400 text-blue-400"
-                      : "border-blue-500 text-blue-600"
-                    : isDarkMode
-                    ? "border-transparent text-gray-400 hover:text-gray-300"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {t.reviews}
-              </button>
-            </nav>
-          </div>
-
-          <div className="p-6">
-            {activeTab === "overview" && (
-              <div>
-                <h3
-                  className={`text-xl font-semibold mb-4 ${
-                    isDarkMode ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  {t.aboutBook}
-                </h3>
-                <p
-                  className={`leading-relaxed mb-6 ${
-                    isDarkMode ? "text-gray-300" : "text-gray-600"
-                  }`}
-                >
-                  {book.summary}
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4
-                      className={`font-semibold mb-3 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {t.publicationDetails}
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {book.details.isbn && (
-                        <div className="flex items-center gap-2">
-                          <Hash className="w-4 h-4 text-gray-400" />
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {t.isbn}: {book.details.isbn}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <Building className="w-4 h-4 text-gray-400" />
-                        <span
-                          className={
-                            isDarkMode ? "text-gray-300" : "text-gray-600"
-                          }
-                        >
-                          {t.publisher}: {book.publisher}
-                        </span>
-                      </div>
-                      {book.details.published_date && (
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {t.publishedDate}: {book.details.published_date}
-                          </span>
-                        </div>
-                      )}
-                      {book.details.price && (
-                        <div className="flex items-center gap-2">
-                          <span className="w-4 h-4 text-green-600 font-bold">
-                            $
-                          </span>
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {t.price}: {formatPrice(book.details.price)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4
-                      className={`font-semibold mb-3 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {t.specifications}
-                    </h4>
-                    <div className="space-y-2 text-sm">
-                      {book.details.total_pages && (
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-gray-400" />
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {book.details.total_pages}
-                          </span>
-                        </div>
-                      )}
-                      {book.details.size && (
-                        <div className="flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-gray-400" />
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {language === "id" ? "Ukuran" : "Size"}:{" "}
-                            {book.details.size}
-                          </span>
-                        </div>
-                      )}
-                      {book.details.format && (
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="w-4 h-4 text-gray-400" />
-                          <span
-                            className={
-                              isDarkMode ? "text-gray-300" : "text-gray-600"
-                            }
-                          >
-                            {t.format}: {book.details.format}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-gray-400" />
-                        <span
-                          className={
-                            isDarkMode ? "text-gray-300" : "text-gray-600"
-                          }
-                        >
-                          {t.rating}: {bookRating.toFixed(1)}/5
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Tags */}
-                {book.tags && book.tags.length > 0 && (
-                  <div className="mt-6">
-                    <h4
-                      className={`font-semibold mb-3 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {t.tags}
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {book.tags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className={`text-xs ${
-                            isDarkMode
-                              ? "border-gray-600 text-gray-300"
-                              : "border-gray-300 text-gray-600"
-                          }`}
-                        >
-                          {tag.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Buy Links */}
-                {book.buy_links && book.buy_links.length > 0 && (
-                  <div className="mt-6">
-                    <h4
-                      className={`font-semibold mb-3 ${
-                        isDarkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {t.buyLinks}
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {book.buy_links.map((link, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          size="sm"
-                          className={`flex items-center gap-2 ${
-                            isDarkMode
-                              ? "bg-stone-50 border-gray-300 text-gray-700 hover:bg-gray-50"
-                              : "bg-blue-50 border-gray-600 text-gray-700 hover:bg-gray-700 hover:text-white"
-                          }`}
-                        >
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                            {link.store}
-                          </a>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === "reviews" && (
-              <div>
-                <h3
-                  className={`text-xl font-semibold mb-6 ${
-                    isDarkMode ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  {t.readerReviews}
-                </h3>
-
-                <div className="text-center py-8">
-                  <MessageCircle
-                    className={`w-16 h-16 mx-auto mb-4 ${
-                      isDarkMode ? "text-gray-600" : "text-gray-300"
-                    }`}
-                  />
-                  <p className={isDarkMode ? "text-gray-400" : "text-gray-500"}>
-                    {t.noReviews}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        </ScrollReveal>
       </div>
     </div>
   );
