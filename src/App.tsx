@@ -102,8 +102,8 @@ function App() {
               </h1>
             </div>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex space-x-8">
+            {/* Desktop Actions */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link
                 to="/"
                 className={`transition-colors ${
@@ -134,10 +134,6 @@ function App() {
               >
                 {t.favorites}
               </Link>
-            </nav>
-
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center space-x-4">
               <Button
                 variant="outline"
                 size="sm"
